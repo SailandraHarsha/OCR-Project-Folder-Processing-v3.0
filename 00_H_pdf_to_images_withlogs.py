@@ -104,6 +104,6 @@ log_message("Calling Image OCR Process")
 log_message("*" * 50)
     
 # Trigger OCR process (replace with actual path for your environment)
-os.system('sudo python3 /home/sailocr/Sudarshan/02_H_images_to_ocr_lang_allformat_withlogs.py')
+os.system('sudo python3 /home/sailocr/02_H_images_to_ocr_lang_allformat_withlogs.py')
 log_message("OCR Process completed.")
 
