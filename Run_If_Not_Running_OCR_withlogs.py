@@ -43,7 +43,7 @@ print(out02)
 # If neither script is running, start the first script
 if len(out01.strip()) == 0 and len(out02.strip()) == 0:
     log_message("Neither script is running. Starting 00_H_pdf_to_images_withlogs.py...")
-    os.system('sudo python3 /home/sailocr/Sudarshan/00_H_pdf_to_images_withlogs.py')
+    os.system('sudo python3 /home/sailocr/00_H_pdf_to_images_withlogs.py')
     log_message("Started 00_H_pdf_to_images_withlogs.py.")
 else:
     # If the first script is running, log it
