@@ -1,9 +1,9 @@
 A)
-chmod +x /home/sailocr/Sudarshan/Run_If_Not_Running_OCR.py
-chmod +x /home/sailocr/Sudarshan/00_H_pdf_to_images.py
-chmod +x /home/sailocr/Sudarshan/02_H_images_to_ocr_lang_allformat.py
+chmod +x /home/sailocr/Run_If_Not_Running_OCR.py
+chmod +x /home/sailocr/00_H_pdf_to_images.py
+chmod +x /home/sailocr/02_H_images_to_ocr_lang_allformat.py
 sudo crontab -e
-* * * * * echo 'your_password' | sudo -S python3 /home/sailocr/Sudarshan/Run_If_Not_Running_OCR.py
+* * * * * echo 'your_password' | sudo -S python3 /home/sailocr/Run_If_Not_Running_OCR.py
 
 
 Explanation:
@@ -19,15 +19,15 @@ Test the Cron Job: tail -f /var/log/syslog
 B)
 Alternate Method:
 sudo visudo
-sailocr ALL=(ALL) NOPASSWD: /home/sailocr/Sudarshan/Run_If_Not_Running_OCR.py
-root ALL=(ALL) NOPASSWD: /home/sailocr/Sudarshan/Run_If_Not_Running_OCR.py
+sailocr ALL=(ALL) NOPASSWD: /home/sailocr/Run_If_Not_Running_OCR.py
+root ALL=(ALL) NOPASSWD: /home/sailocr/Run_If_Not_Running_OCR.py
 
 
-sailocr ALL=(ALL) NOPASSWD: /home/sailocr/Sudarshan/Run_If_Not_Running_OCR_withlogs.py
-root ALL=(ALL) NOPASSWD: /home/sailocr/Sudarshan/Run_If_Not_Running_OCR_withlogs.py
+sailocr ALL=(ALL) NOPASSWD: /home/sailocr/Run_If_Not_Running_OCR_withlogs.py
+root ALL=(ALL) NOPASSWD: /home/sailocr/Run_If_Not_Running_OCR_withlogs.py
 
 
 sudo crontab -e
-* * * * * sudo python3 /home/sailocr/Sudarshan/Run_If_Not_Running_OCR.py
-* * * * * sudo python3 /home/sailocr/Sudarshan/Run_If_Not_Running_OCR_withlogs.py
+* * * * * sudo python3 /home/sailocr/Run_If_Not_Running_OCR.py
+* * * * * sudo python3 /home/sailocr/Run_If_Not_Running_OCR_withlogs.py
 
