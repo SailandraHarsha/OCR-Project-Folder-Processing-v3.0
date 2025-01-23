@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sailandra Translation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmlson.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+  <script>
+      var InLangsNames = {hi:"Hindi", as: "Assamese", bn: "Bengali", gu: "Gujarati", kn: "Kannada", ml: "Malayalam", mr: "Marathi", or: "Oriya", pa: "Punjabi", ta: "Tamil", te: "Telugu"}
+      var InControls = { txtQ: "Question", txtOP1: " Option 1", txtOP2: " Option 2", txtOP3: " Option 3", txtOP4: " Option 4" }
+
+      function Transalate() {
+          $("#tblTransContent").html('<tr><td>Language</td><td>Question</td><td>Option 1</td><td>Option 2</td><td>Option 3</td><td>Option 4</td></tr>');
+          var ddlOne = $('select#SelSrcLan option:selected').val();
+          var ddlTwo = $('select#SelTarLan option:selected').val();
+          var TransContent = "<tr><td>"+InLangsNames[ddlTwo]+"</td>";
+
+          $.each(InControls, function (index, value) {
+              $.ajax({
+                  url: "https://127.0.0.0:5001/SailGetTransAllToAll", data: JSON.stringify({ SailText: $("#" + index).val(), SrcLang: ddlOne, TrgLang: ddlTwo }), method: "POST", headers: { "Content-Type": "application/json" }, async: false, success: function (result) {
+                      if (index == "txtOP4") { TransContent+="<td>" + result.TranslatedText + "</td></tr>"; }
+                      else { TransContent += "<td>" + result.TranslatedText + "</td>";}
+                      
+                  }
+              });
+          });
+          $("#tblTransContent").append(TransContent);
+      }
+
+      function TransalateToAll() {
+          $("#tblTransContent").html('<tr><td>S.No.</td><td>Language</td><td>Question</td><td>Option 1</td><td>Option 2</td><td>Option 3</td><td>Option 4</td></tr>');
+          var TransContent = "";
+          var currCnt = 1;
+          $.each(InLangsNames, function (indexLang, valueLang) {
+              TransContent = "<tr><td>" + currCnt+"</td><td>" + InLangsNames[indexLang] + "</td>";
+              $.each(InControls, function (index, value) {
+                  $.ajax({
+                      url: "https://127.0.0.1:5001/SailGetTransAllToAll", data: JSON.stringify({ SailText: $("#" + index).val(), SrcLang: 'en', TrgLang: indexLang }), method: "POST", headers: { "Content-Type": "application/json" }, async: false, success: function (result) {
+                          if (index == "txtOP4") { TransContent += "<td>" + result.TranslatedText + "</td></tr>"; }
+                          else { TransContent += "<td>" + result.TranslatedText + "</td>"; }
+
+                      }
+                  });
+              });
+              $("#tblTransContent").append(TransContent);
+              currCnt += 1;
+          });
+          
+      }
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <p>Type/past text/content in below for translation:</p>
+  <form>
+      <div class="form-group">
+          <label for="comment">Question:</label>
+          <input class="form-control" id="txtQ" name="txtQ" />
+      </div>
+      <div class="form-group">
+          <label for="comment">Option 1:</label>
+          <input class="form-control" id="txtOP1" name="txtOP1" />
+      </div>
+      <div class="form-group">
+          <label for="comment">Option 2:</label>
+          <input class="form-control" id="txtOP2" name="txtOP2" />
+      </div>
+      <div class="form-group">
+          <label for="comment">Option 3:</label>
+          <input class="form-control" id="txtOP3" name="txtOP3" />
+      </div>
+      <div class="form-group">
+          <label for="comment">Option 4:</label>
+          <input class="form-control" id="txtOP4" name="txtOP4" />
+      </div>
+      <div class="center p-4">
+          <div class="input-group mb-3">
+              <select class="browser-default" id="SelSrcLan">
+                  <option value="hi">Hindi</option>
+                  <option value="en" selected>English</option>
+                  <option value="as">Assamese</option>
+                  <option value="mr">Marathi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="bn">Bengali</option>
+                  <option value="kn">Kannada</option>
+                  <option value="or">Oriya</option>
+                  <option value="te">Telugu</option>
+                  <option value="gu">Gujarati</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="pa">Punjabi</option>
+                  <!--	<option value="auto">Auto Detect (Experimental)</option>-->
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <select class="browser-default" id="SelTarLan">
+                  <option value="hi" selected>Hindi</option>
+                  <option value="en">English</option>
+                  <option value="as">Assamese</option>
+                  <option value="mr">Marathi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="bn">Bengali</option>
+                  <option value="kn">Kannada</option>
+                  <option value="or">Oriya</option>
+                  <option value="te">Telugu</option>
+                  <option value="gu">Gujarati</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="pa">Punjabi</option>
+                  <!--	<option value="auto">Auto Detect (Experimental)</option>-->
+              </select>
+              <div class="input-group-append">
+                  <span class="btn btn-primary" onclick="Transalate();">Translate</span>
+                  <span class="btn btn-dark" onclick="TransalateToAll();">Translate (En To All)</span>
+              </div>
+          </div>
+      </div>
+      <table id="tblTransContent" class="testTable table table-hover">
+
+      </table>
+  </form>
+</div>
+
+</body>
+</html>
+
+

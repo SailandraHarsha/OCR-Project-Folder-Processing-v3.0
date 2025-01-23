@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sailandra Translation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmlson.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+      var InLangsNames = {hi:"Hindi", as: "Assamese", bn: "Bengali", gu: "Gujarati", kn: "Kannada", ml: "Malayalam", mr: "Marathi", or: "Oriya", pa: "Punjabi", ta: "Tamil", te: "Telugu", en: "English"}
+
+      function Transalate() {
+          $("#tblTransContent").html('<tr><td>Language</td><td>Translation</td></tr>');
+          var ddlOne = $('select#SelSrcLan option:selected').val();
+          var ddlTwo = $('select#SelTarLan option:selected').val();
+          var TransContent = "<tr><td>"+InLangsNames[ddlTwo]+"</td>";
+
+      $.ajax({
+          url: "http://192.168.181.127:5002/translate", data: JSON.stringify({ txt: $("#txtASrc").val(), source: ddlOne, target: ddlTwo, Model:"I" }), method: "POST", headers: { "Content-Type": "application/json" }, async: false, success: function (result) {
+              TransContent+="<td>" + result.translatedText + "</td></tr>";
+          }
+      });
+          $("#tblTransContent").append(TransContent);
+      }
+
+      function TransalateToAll() {
+          $("#tblTransContent").html('<tr><td>S.No.</td><td>Language</td>/tr>');
+          var TransContent = "";
+          var currCnt = 1;
+          $.each(InLangsNames, function (indexLang, valueLang) {
+              TransContent = "<tr><td>" + currCnt+"</td><td>" + InLangsNames[indexLang] + "</td>";
+                  $.ajax({
+                      url: "http://192.168.181.127:5002/translate", data: JSON.stringify({ txt: $("#txtASrc").val(), source: 'en', target: indexLang, Model:"I" }), method: "POST", headers: { "Content-Type": "application/json" }, async: false, success: function (result) {
+                          TransContent += "<td>" + result.translatedText + "</td></tr>";
+                      }
+              });
+              $("#tblTransContent").append(TransContent);
+              currCnt += 1;
+          });
+          
+      }
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <p>Type/past text/content in below for translation:</p>
+  <form>
+      <div class="form-group">
+          <textarea class="form-control" id="txtASrc" name="txtASrc" rows="4" cols="50"></textarea>
+      </div>
+      <div class="center p-4">
+          <div class="input-group mb-3">
+              <select class="browser-default" id="SelSrcLan">
+                  <option value="ihi">Hindi</option>
+                  <option value="en" selected>English</option>
+                  <option value="as">Assamese</option>
+                  <option value="mr">Marathi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="bn">Bengali</option>
+                  <option value="kn">Kannada</option>
+                  <option value="or">Oriya</option>
+                  <option value="te">Telugu</option>
+                  <option value="gu">Gujarati</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="pa">Punjabi</option>
+                  <!--	<option value="auto">Auto Detect (Experimental)</option>-->
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <select class="browser-default" id="SelTarLan">
+                  <option value="ihi" selected>Hindi</option>
+                  <option value="en">English</option>
+                  <option value="as">Assamese</option>
+                  <option value="mr">Marathi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="bn">Bengali</option>
+                  <option value="kn">Kannada</option>
+                  <option value="or">Oriya</option>
+                  <option value="te">Telugu</option>
+                  <option value="gu">Gujarati</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="pa">Punjabi</option>
+                  <!--	<option value="auto">Auto Detect (Experimental)</option>-->
+              </select>
+              <div class="input-group-append">
+                  <span class="btn btn-primary" onclick="Transalate();">Translate</span>
+                  <span class="btn btn-dark" onclick="TransalateToAll();">Translate (En To All)</span>
+              </div>
+          </div>
+      </div>
+      <table id="tblTransContent" class="testTable table table-hover">
+
+      </table>
+  </form>
+</div>
+
+</body>
+</html>
+
+
